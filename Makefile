@@ -1,10 +1,10 @@
-VERSION := 0.2.0
-REGISTRY ?= quay.io
-IMAGE_PREFIX ?= deis/
-IMAGE := ${REGISTRY}/${IMAGE_PREFIX}go-dev:${VERSION}
+VERSION := $(shell git describe --tags --exact-match 2>/dev/null || echo latest)
+PROJECT_NAME := go-dev
 
-build:
-	docker build -t ${IMAGE} rootfs
+include info.mk docker.mk
 
-push: build
-	docker push ${IMAGE}
+.PHONY: build
+build: docker-build
+
+.PHONY: push
+push: docker-push
